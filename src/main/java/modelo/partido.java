@@ -5,6 +5,13 @@
  */
 package modelo;
 
+import ec.edu.espol.proyecto2p.App;
+import static ec.edu.espol.proyecto2p.App.pathFile;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  *
  * @author User
@@ -56,6 +63,21 @@ public class partido {
         this.inicialesLocal = inicialesLocal;
         this.inicialesVisita = inicialesVisita;
     }
+
+    public partido(int anio, String fecha, String fase, String estadio, String ciudad, String nombreLocal, int golLocal, int golVisita, String nombreVisita, String idRonda, String idPartido) {
+        this.anio = anio;
+        this.fecha = fecha;
+        this.fase = fase;
+        this.estadio = estadio;
+        this.ciudad = ciudad;
+        this.nombreLocal = nombreLocal;
+        this.golLocal = golLocal;
+        this.golVisita = golVisita;
+        this.nombreVisita = nombreVisita;
+        this.idRonda = idRonda;
+        this.idPartido = idPartido;
+    }
+    
 
     public int getAnio() {
         return anio;
@@ -216,6 +238,40 @@ public class partido {
     public void setInicialesVisita(String inicialesVisita) {
         this.inicialesVisita = inicialesVisita;
     }
+    
+    
+        
+    public static ArrayList<partido> obtenerPartidos(){
+        ArrayList<partido> partidos = new ArrayList<>();
+        try{
+            Scanner sc = new Scanner(new File(App.pathFile+"WorldCupMatchesBrasil2014.csv"));
+                while(sc.hasNextLine()){
+                       String line = sc.nextLine();
+                    if (line.startsWith("2014")){
+                        String[] linea = line.split("|");
+                        String l=null;
+                        StringBuilder sb = new StringBuilder();
+                        for(int i=0;i<linea.length;i++){
+                            if(linea[i].equals("|"))
+                                sb.append(";");
+                            else sb.append(linea[i]);
+                            
+                        }
+                        l = sb.toString();
+                        String[] lineas = l.split(";");
+                        //(int anio 0, String fecha1, String fase2, String estadio3, String ciudad4, String nombreLocal5, int golLocal6, int golVisita7, String nombreVisita8, String idRonda 16, String idPartido17
+                        partido p = new partido(Integer.valueOf(lineas[0].trim()),lineas[1].trim(),lineas[2].trim(),lineas[3].trim(),lineas[4].trim(),lineas[5].trim(),Integer.valueOf(lineas[6].trim()),Integer.valueOf(lineas[7].trim()),lineas[8].trim(),lineas[16].trim(),lineas[17].trim());
+                        partidos.add(p);
+                    }
+                }
+                sc.close();
+            }catch (FileNotFoundException e){
+                System.out.println("no se encontro el archivo");
+            }
+            return partidos;
+    }
+    
+    
     
     
 }

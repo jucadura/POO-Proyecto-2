@@ -81,7 +81,7 @@ public class VentanaInicioController implements Initializable {
             st.setScene(s);
             st.show();
         }catch (IOException e){
-            System.out.println("No se pudo crear la ventana");
+            e.printStackTrace();
         }
     }
     
